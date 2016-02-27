@@ -1,6 +1,19 @@
 import ddf.minim.*;
 import ddf.minim.analysis.*;
 
+import controlP5.*;
+
+// Virtual knobs
+ControlP5 cp5;
+boolean showVirtualKnobs = false;
+Knob virtualKnobA;
+Knob virtualKnobB;
+Knob virtualKnobC;
+
+float intensityPerc;
+float multiplierB;
+float multiplierC;
+
 Minim minim;
 AudioInput audioIn;
 BeatDetect beat;
@@ -15,8 +28,6 @@ void setup() {
     size(1280, 720, P3D);
     // fullScreen(P3D);
     frameRate(30);
-    background(255);
-    stroke(0);
 
     minim = new Minim(this);
     audioIn = minim.getLineIn(Minim.STEREO, 1024);
@@ -28,8 +39,59 @@ void setup() {
     visualizers = new ArrayList<Visualizer>();
     visualizers.add(new SphereCoilVisualizer(this));
     selected = 0;
+
+    // Add some virtual knobs for testing
+    cp5 = new ControlP5(this);
+    virtualKnobA = cp5.addKnob("intensityPerc")
+        .setRange(0,1)
+        .setValue(0.5)
+        .setRadius(30)
+        .setPosition(20, height - 90)
+        .setLabel("Intensity")
+        .setDragDirection(Knob.HORIZONTAL)
+        .hide();
+
+    virtualKnobB = cp5.addKnob("multiplierB")
+        .setRange(0,1)
+        .setValue(0.5)
+        .setRadius(30)
+        .setPosition(90, height - 90)
+        .setLabel("Color")
+        .setDragDirection(Knob.HORIZONTAL)
+        .hide();
+
+    virtualKnobC = cp5.addKnob("multiplierC")
+        .setRange(0,1)
+        .setValue(0.5)
+        .setRadius(30)
+        .setPosition(160, height - 90)
+        .setLabel("?????")
+        .setDragDirection(Knob.HORIZONTAL)
+        .hide();
 }
 
 void draw() {
     visualizers.get(selected).display();
+    if(showVirtualKnobs){
+        camera();
+        fill(0,100);
+        noStroke();
+        rect(10, height-100, 220, 90);
+    }
+}
+
+void keyReleased() {
+    if(key==' '){
+        if(!showVirtualKnobs){
+            showVirtualKnobs = true;
+            virtualKnobA.show();
+            virtualKnobB.show();
+            virtualKnobC.show();
+        } else if(showVirtualKnobs){
+            showVirtualKnobs = false;
+            virtualKnobA.hide();
+            virtualKnobB.hide();
+            virtualKnobC.hide();
+        }
+    }
 }
