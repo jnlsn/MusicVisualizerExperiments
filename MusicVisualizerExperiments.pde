@@ -10,9 +10,9 @@ Knob virtualKnobA;
 Knob virtualKnobB;
 Knob virtualKnobC;
 
-float intensityPerc;
-float multiplierB;
-float multiplierC;
+float motionPerc;
+float colorPerc;
+float shapePerc;
 
 Minim minim;
 AudioInput audioIn;
@@ -42,16 +42,16 @@ void setup() {
 
     // Add some virtual knobs for testing
     cp5 = new ControlP5(this);
-    virtualKnobA = cp5.addKnob("intensityPerc")
+    virtualKnobA = cp5.addKnob("motionPerc")
         .setRange(0,1)
         .setValue(0.5)
         .setRadius(30)
         .setPosition(20, height - 90)
-        .setLabel("Intensity")
+        .setLabel("Motion")
         .setDragDirection(Knob.HORIZONTAL)
         .hide();
 
-    virtualKnobB = cp5.addKnob("multiplierB")
+    virtualKnobB = cp5.addKnob("colorPerc")
         .setRange(0,1)
         .setValue(0.5)
         .setRadius(30)
@@ -60,12 +60,12 @@ void setup() {
         .setDragDirection(Knob.HORIZONTAL)
         .hide();
 
-    virtualKnobC = cp5.addKnob("multiplierC")
+    virtualKnobC = cp5.addKnob("shapePerc")
         .setRange(0,1)
         .setValue(0.5)
         .setRadius(30)
         .setPosition(160, height - 90)
-        .setLabel("?????")
+        .setLabel("Shape")
         .setDragDirection(Knob.HORIZONTAL)
         .hide();
 }
