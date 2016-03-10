@@ -12,20 +12,27 @@ class SphereCoilVisualizer extends Visualizer
     @Override
     public void display(){
         background(255);
-        stroke(0);
+        strokeWeight(1.5);
 
-        beatVal *= 0.8;
+        // calculate faster decay for greater motion
+        beatVal *= (0.9 - 0.4 * motionPerc);
+        // Give hat, snare, and kick different weight
         if(beat.isHat()) beatVal += radius*0.02 + radius*0.02*motionPerc;
         if(beat.isSnare()) beatVal += radius*0.04 + radius*0.04*motionPerc;
         if(beat.isKick()) beatVal += radius*0.06 + radius*0.06*motionPerc;
-        beatVal = constrain(beatVal, 0, radius*2);
+        // prevent sphere from growing off screen
+        beatVal = constrain(beatVal, 0, radius);
 
+        // Center drawing point
         translate(width/2, height/2, 0);
+
+        // Slowly rotate camera
         rotateY(frameCount * 0.003);
         rotateX(frameCount * 0.004);
 
         float s = 0;
         float t = 0;
+        float c = 0;
         float lastx = 0;
         float lasty = 0;
         float lastz = 0;
@@ -33,6 +40,7 @@ class SphereCoilVisualizer extends Visualizer
         float tIncrement = 180.0/bsize;
         float sIncrement = 1 + 5 * shapePerc;
         for (int b = 0; b < bsize; b++){
+            c += 0.001 * colorPerc;
             s += sIncrement;
             t += tIncrement;
             float radianS = radians(s);
@@ -42,7 +50,29 @@ class SphereCoilVisualizer extends Visualizer
             float thisy = 0 + ((radius + audioIn.mix.get(b)*intensity) * sin(radianS) * sin(radianT));
             float thisz = 0 + ((radius + beatVal) * cos(radianT));
             if (lastx != 0) {
+                stroke(
+                    (128*sin(t/9+sIncrement*c)+127)*colorPerc,
+                    (128*sin(t/9+PI+sIncrement*c)+127)*colorPerc,
+                    (128*cos(t/9-sIncrement*c)+127)*colorPerc
+                );
+                // draw the waveform
                 line(thisx, thisy, thisz, lastx, lasty, lastz);
+
+                // draw a line connecting waveform to center spindle
+                // line(thisx, thisy, thisz, 0, 0, lastz);
+
+                // draw a triangle connecting waveform to center spindle
+                // fill(
+                //     (128*sin(t/9+sIncrement*c)+127)*colorPerc,
+                //     (128*sin(t/9+PI+sIncrement*c)+127)*colorPerc,
+                //     (128*cos(t/9-sIncrement*c)+127)*colorPerc
+                // );
+                // noStroke();
+                // beginShape();
+                // vertex(thisx, thisy, thisz);
+                // vertex(lastx, lasty, lastz);
+                // vertex(0, 0, lastz);
+                // endShape();
             }
             lastx = thisx;
             lasty = thisy;

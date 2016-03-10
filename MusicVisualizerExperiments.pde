@@ -37,6 +37,7 @@ void setup() {
     bl = new BeatListener(beat,audioIn);
 
     visualizers = new ArrayList<Visualizer>();
+    visualizers.add(new MaxHeadroomVisualizer(this));
     visualizers.add(new SphereCoilVisualizer(this));
     selected = 0;
 
@@ -44,7 +45,7 @@ void setup() {
     cp5 = new ControlP5(this);
     virtualKnobA = cp5.addKnob("motionPerc")
         .setRange(0,1)
-        .setValue(0.5)
+        .setValue(random(1))
         .setRadius(30)
         .setPosition(20, height - 90)
         .setLabel("Motion")
@@ -53,7 +54,7 @@ void setup() {
 
     virtualKnobB = cp5.addKnob("colorPerc")
         .setRange(0,1)
-        .setValue(0.5)
+        .setValue(random(1))
         .setRadius(30)
         .setPosition(90, height - 90)
         .setLabel("Color")
@@ -62,7 +63,7 @@ void setup() {
 
     virtualKnobC = cp5.addKnob("shapePerc")
         .setRange(0,1)
-        .setValue(0.5)
+        .setValue(random(1))
         .setRadius(30)
         .setPosition(160, height - 90)
         .setLabel("Shape")
