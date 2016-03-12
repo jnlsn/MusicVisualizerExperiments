@@ -3,12 +3,12 @@ import ddf.minim.analysis.*;
 
 import controlP5.*;
 
-// Virtual knobs
+// Virtual controls
 ControlP5 cp5;
 boolean showVirtualKnobs = false;
-Knob virtualKnobA;
-Knob virtualKnobB;
-Knob virtualKnobC;
+boolean toggleA = false;
+boolean toggleB = false;
+boolean toggleC = false;
 
 float motionPerc;
 float colorPerc;
@@ -41,34 +41,54 @@ void setup() {
     visualizers.add(new SphereCoilVisualizer(this));
     selected = 0;
 
-    // Add some virtual knobs for testing
+    // Add some virtual knobs and buttons for testing
     cp5 = new ControlP5(this);
-    virtualKnobA = cp5.addKnob("motionPerc")
-        .setRange(0,1)
-        .setValue(random(1))
-        .setRadius(30)
-        .setPosition(20, height - 90)
-        .setLabel("Motion")
-        .setDragDirection(Knob.HORIZONTAL)
-        .hide();
 
-    virtualKnobB = cp5.addKnob("colorPerc")
+    cp5.addKnob("motionPerc")
+        .setLabelVisible(false)
         .setRange(0,1)
         .setValue(random(1))
         .setRadius(30)
-        .setPosition(90, height - 90)
-        .setLabel("Color")
-        .setDragDirection(Knob.HORIZONTAL)
-        .hide();
+        .setPosition(20, height - 80)
+        .setDragDirection(Knob.HORIZONTAL);
 
-    virtualKnobC = cp5.addKnob("shapePerc")
+    cp5.addKnob("shapePerc")
+        .setLabelVisible(false)
         .setRange(0,1)
         .setValue(random(1))
         .setRadius(30)
-        .setPosition(160, height - 90)
-        .setLabel("Shape")
-        .setDragDirection(Knob.HORIZONTAL)
-        .hide();
+        .setPosition(90, height - 80)
+        .setDragDirection(Knob.HORIZONTAL);
+
+    cp5.addKnob("colorPerc")
+        .setLabelVisible(false)
+        .setRange(0,1)
+        .setValue(random(1))
+        .setRadius(30)
+        .setPosition(160, height - 80)
+        .setDragDirection(Knob.HORIZONTAL);
+
+    cp5.addToggle("toggleA")
+        .setLabelVisible(false)
+        .setPosition(230, height - 80)
+        .setSize(15, 15);
+
+    cp5.addToggle("toggleB")
+        .setLabelVisible(false)
+        .setPosition(230, height - 58)
+        .setSize(15, 15);
+
+    cp5.addToggle("toggleC")
+        .setLabelVisible(false)
+        .setPosition(230, height - 35)
+        .setSize(15, 15);
+
+    cp5.addButton("skipVisualizer")
+        .setPosition(255, height - 80)
+        .setLabel(">")
+        .setSize(15, 60);
+
+    cp5.hide();
 }
 
 void draw() {
@@ -77,7 +97,7 @@ void draw() {
         camera();
         fill(0,100);
         noStroke();
-        rect(10, height-100, 220, 90);
+        rect(10, height-90, 270, 80);
     }
 }
 
@@ -85,14 +105,17 @@ void keyReleased() {
     if(key==' '){
         if(!showVirtualKnobs){
             showVirtualKnobs = true;
-            virtualKnobA.show();
-            virtualKnobB.show();
-            virtualKnobC.show();
+            cp5.show();
         } else if(showVirtualKnobs){
             showVirtualKnobs = false;
-            virtualKnobA.hide();
-            virtualKnobB.hide();
-            virtualKnobC.hide();
+            cp5.hide();
         }
+    }
+}
+
+void skipVisualizer(int theValue) {
+    selected++;
+    if(selected >= visualizers.size()){
+        selected = 0;
     }
 }

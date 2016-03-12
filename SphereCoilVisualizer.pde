@@ -27,8 +27,8 @@ class SphereCoilVisualizer extends Visualizer
         translate(width/2, height/2, 0);
 
         // Slowly rotate camera
-        rotateY(frameCount * 0.003);
-        rotateX(frameCount * 0.004);
+        rotateY(frameCount * random(0.004, 0.001));
+        rotateX(frameCount * random(0.004, 0.001));
 
         float s = 0;
         float t = 0;
@@ -58,21 +58,25 @@ class SphereCoilVisualizer extends Visualizer
                 // draw the waveform
                 line(thisx, thisy, thisz, lastx, lasty, lastz);
 
-                // draw a line connecting waveform to center spindle
-                // line(thisx, thisy, thisz, 0, 0, lastz);
-
                 // draw a triangle connecting waveform to center spindle
-                // fill(
-                //     (128*sin(t/9+sIncrement*c)+127)*colorPerc,
-                //     (128*sin(t/9+PI+sIncrement*c)+127)*colorPerc,
-                //     (128*cos(t/9-sIncrement*c)+127)*colorPerc
-                // );
-                // noStroke();
-                // beginShape();
-                // vertex(thisx, thisy, thisz);
-                // vertex(lastx, lasty, lastz);
-                // vertex(0, 0, lastz);
-                // endShape();
+                if(toggleA){
+                    fill(
+                        (128*sin(t/9+sIncrement*c)+127)*colorPerc,
+                        (128*sin(t/9+PI+sIncrement*c)+127)*colorPerc,
+                        (128*cos(t/9-sIncrement*c)+127)*colorPerc
+                    );
+                    noStroke();
+                    beginShape();
+                    vertex(thisx, thisy, thisz);
+                    vertex(lastx, lasty, lastz);
+                    vertex(0, 0, lastz);
+                    endShape();
+                }
+
+                // draw a line connecting waveform to center spindle
+                if(toggleB){
+                    line(thisx, thisy, thisz, 0, 0, lastz);
+                }
             }
             lastx = thisx;
             lasty = thisy;
